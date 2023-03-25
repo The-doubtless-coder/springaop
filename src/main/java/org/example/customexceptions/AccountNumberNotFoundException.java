@@ -1,4 +1,4 @@
-package org.example;
+package org.example.customexceptions;
 
 public class AccountNumberNotFoundException extends Exception{
     @Override

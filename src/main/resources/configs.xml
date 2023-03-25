@@ -1,0 +1,30 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean id="bank" class="org.example.business.BankImpl">
+        <constructor-arg name="amount" type="int" value="5000"/>
+        <constructor-arg name="accountNumber" type="java.lang.String" value="kcb123"/>
+    </bean>
+    <bean id="log_around" class="org.example.aspects.LogAroundAspect"/>
+    <bean id="log_before" class="org.example.aspects.LogBeforeServiceAspect"/>
+    <bean id="log_after" class="org.example.aspects.LogAfterServiceAspect"/>
+    <bean id="throws" class="org.example.aspects.LogExceptions"/>
+    <bean id="bank_pointcut" class="org.example.aspects.pointcuts.BankPointCut"/>
+    <bean id="bank_advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="log_around"/>
+        <property name="pointcut" ref="bank_pointcut"/>
+    </bean>
+    <bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="bank"/>
+<!--        <property name="interceptorNames">-->
+<!--            <list>-->
+<!--            <value>log_around</value>-->
+<!--            </list>-->
+<!--        </property>-->
+        <property name="interceptorNames">
+            <list>
+                <value>bank_advisor</value>
+            </list>
+        </property>
+             </bean>
+ </beans>
